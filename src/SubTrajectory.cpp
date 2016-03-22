@@ -397,7 +397,7 @@ Lateral::Lateral(const base::Pose2D& currentPose, double angle, double length, d
     std::vector< base::Pose2D > poses;
     base::Pose2D endPose;
     endPose.orientation = currentPose.orientation;
-    endPose.position = Eigen::Rotation2Dd(angle) * Eigen::Vector2d(length, 0.);
+    endPose.position = currentPose.position + Eigen::Rotation2Dd(angle) * Eigen::Vector2d(length, 0.);
     poses.push_back(currentPose);
     poses.push_back(endPose);
     interpolate(poses);

@@ -191,7 +191,6 @@ private:
     double distanceError;
     double angleError, lastAngleError;
     double posError;
-    double splineReferenceErrorCoefficient;
     FollowerData followerData;
     FollowerStatus followerStatus, lastFollowerStatus;
     SubTrajectory trajectory;
