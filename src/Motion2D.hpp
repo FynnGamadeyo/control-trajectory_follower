@@ -10,8 +10,7 @@ namespace trajectory_follower {
 enum DriveMode {
     ModeAckermann,
     ModeTurnOnTheSpot,
-    ModeSideways,
-    ModeDiagonal
+    ModeLateral
 };
 
 struct Motion2D {
@@ -43,9 +42,13 @@ struct Motion2D {
     
     DriveMode getDriveMode()
     {
-        if (translation == 0)
+        if (translation == 0 && rotation != 0)
         {
             return ModeTurnOnTheSpot;
+        }
+        else if (heading != 0 && rotation == 0)
+        {
+            return ModeLateral;
         }
         else
         {
