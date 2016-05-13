@@ -33,7 +33,7 @@ struct Motion2D {
         this->heading = atan2(translation.y(), translation.x());
     }
 
-    Motion2D(double translation, double rotation, double orientation)
+    Motion2D(double translation, double rotation, double orientation = 0)
         : translation(translation)
         , rotation(rotation)
         , heading(orientation)
@@ -63,8 +63,10 @@ struct Motion2D {
         cmd.translation = this->translation;
         return cmd;
     }
+    
 };
-
+    inline bool operator==(const Motion2D& lhs, const Motion2D& rhs){ return lhs.translation == rhs.translation && lhs.rotation == rhs.rotation && lhs.heading == rhs.heading;}
+    inline bool operator!=(const Motion2D& lhs, const Motion2D& rhs){ return !(lhs == rhs); }
 }
 
 #endif
