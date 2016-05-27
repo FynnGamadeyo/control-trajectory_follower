@@ -5,7 +5,7 @@
 
 using namespace trajectory_follower;
 
-Motion2D& NoOrientationController::update(double speed, double distanceError, double angleError, double curvature, double variationOfCurvature)
+base::commands::Motion2D& NoOrientationController::update(double speed, double distanceError, double angleError, double curvature, double variationOfCurvature)
 {
     if (!configured)
     {
@@ -29,7 +29,7 @@ Motion2D& NoOrientationController::update(double speed, double distanceError, do
     return motionCommand;
 }
 
-Motion2D& ChainedController::update(double speed, double distanceError, double angleError, double curvature, double variationOfCurvature)
+base::commands::Motion2D& ChainedController::update(double speed, double distanceError, double angleError, double curvature, double variationOfCurvature)
 {
     if (!configured)
     {
@@ -64,7 +64,7 @@ Motion2D& ChainedController::update(double speed, double distanceError, double a
     return motionCommand;
 }
 
-Motion2D& SamsonController::update(double speed, double distanceError, double angleError, double curvature, double variationOfCurvature)
+base::commands::Motion2D& SamsonController::update(double speed, double distanceError, double angleError, double curvature, double variationOfCurvature)
 {
     if (!configured)
     {
@@ -247,7 +247,7 @@ void TrajectoryFollower::computeErrors(const base::Pose& robotPose)
     angleError = err.second;
 }
 
-FollowerStatus TrajectoryFollower::traverseTrajectory(Motion2D &motionCmd, const base::Pose &robotPose)
+FollowerStatus TrajectoryFollower::traverseTrajectory(base::commands::Motion2D &motionCmd, const base::Pose &robotPose)
 {
     motionCmd.translation = 0;
     motionCmd.rotation = 0;
@@ -356,7 +356,7 @@ FollowerStatus TrajectoryFollower::traverseTrajectory(Motion2D &motionCmd, const
                 && std::signbit(lastAngleError) == std::signbit(angleError))
         {
             motionCmd.rotation = pointTurnDirection * followerConf.pointTurnVelocity;
-            followerData.cmd = motionCmd.toBaseMotion2D();
+            followerData.cmd = motionCmd;
             return followerStatus;
         }
         else
@@ -395,22 +395,23 @@ FollowerStatus TrajectoryFollower::traverseTrajectory(Motion2D &motionCmd, const
         motionCmd.rotation = std::max(motionCmd.rotation, -followerConf.maxRotationalVelocity);
     }
 
-    if (trajectory.driveMode == ModeLateral)
+    // TODO: check drive mode
+    /*if (trajectory.driveMode == ModeLateral)
     {
         motionCmd.rotation = 0.;
         motionCmd.heading = trajectory.splineHeading(currentCurveParameter);
-    }
+    }*/
 
-    followerData.cmd = motionCmd.toBaseMotion2D();
+    followerData.cmd = motionCmd;
     return followerStatus;
 }
 
 bool TrajectoryFollower::checkTurnOnSpot()
 {
-    if (trajectory.driveMode == ModeLateral)
+    /*if (trajectory.driveMode == ModeLateral)
     {
         return false;
-    }
+    }*/
     
     if (pointTurn)
     {
